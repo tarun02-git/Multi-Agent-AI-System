@@ -1,0 +1,29 @@
+From: John Smith <john.smith@example.com>
+Subject: URGENT: Request for Quote - Office Supplies
+Date: Wed, 20 Mar 2024 10:00:00 -0400
+Content-Type: text/plain
+
+Dear Supplier,
+
+We are in urgent need of office supplies for our new office location. Please provide a quote for the following items:
+
+1. 50 reams of A4 paper
+2. 20 boxes of pens
+3. 10 boxes of highlighters
+4. 5 whiteboard markers
+
+We need these supplies by next week (March 27, 2024) as we are moving to our new office.
+
+Please include:
+- Unit prices
+- Bulk discounts if applicable
+- Delivery timeline
+- Payment terms
+
+Reference: RFQ-2024-001
+
+Best regards,
+John Smith
+Procurement Manager
+Acme Corporation
+Phone: (555) 123-4567 

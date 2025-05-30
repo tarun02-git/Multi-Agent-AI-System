@@ -1,0 +1,20 @@
+{
+    "type": "invoice",
+    "data": {
+        "invoice_number": "INV-2024-001",
+        "amount": 1500.00,
+        "date": "2024-03-20",
+        "items": [
+            {
+                "description": "Office Supplies",
+                "quantity": 2,
+                "unit_price": 750.00
+            }
+        ],
+        "customer": {
+            "name": "Acme Corporation",
+            "email": "accounts@acme.com",
+            "address": "123 Business St, Suite 100"
+        }
+    }
+} 

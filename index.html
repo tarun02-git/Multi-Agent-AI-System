@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent AI System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-robot text-2xl text-blue-600 mr-2"></i>
+                    <span class="text-xl font-bold text-gray-800">Multi-Agent AI System</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/api/docs" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-book mr-1"></i> API Docs
+                    </a>
+                    <a href="/health" class="text-gray-600 hover:text-blue-600 transition-colors">
+                        <i class="fas fa-heartbeat mr-1"></i> Health
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to Multi-Agent AI System</h1>
+            <p class="text-xl text-gray-600">Process and analyze your documents with AI-powered agents</p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-md card-hover transition-all">
+                <i class="fas fa-file-alt text-3xl text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Document Processing</h3>
+                <p class="text-gray-600">Process PDF, JSON, and Email documents with intelligent classification</p>
+            </div>
+            <div class="bg-white rounded-lg p-6 shadow-md card-hover transition-all">
+                <i class="fas fa-brain text-3xl text-green-600 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">AI Agents</h3>
+                <p class="text-gray-600">Specialized agents for different document types and intents</p>
+            </div>
+            <div class="bg-white rounded-lg p-6 shadow-md card-hover transition-all">
+                <i class="fas fa-chart-line text-3xl text-purple-600 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">Smart Analysis</h3>
+                <p class="text-gray-600">Extract insights and detect patterns in your documents</p>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-12">
+            <h2 class="text-2xl font-bold mb-6">Process Your Documents</h2>
+            <div class="space-y-6">
+                <!-- File Upload -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <form id="uploadForm" class="space-y-4">
+                        <div class="flex items-center justify-center">
+                            <label class="cursor-pointer">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-blue-600 mb-2"></i>
+                                <p class="text-gray-600">Drag and drop your file here or click to browse</p>
+                                <input type="file" class="hidden" id="fileInput">
+                            </label>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            Process File
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Text Input -->
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold mb-4">Or paste your content here:</h3>
+                    <textarea id="contentInput" class="w-full h-32 p-4 border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" placeholder="Paste your JSON, email, or other content here..."></textarea>
+                    <button onclick="processContent()" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        Process Content
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="bg-white rounded-lg shadow-md p-8 hidden">
+            <h2 class="text-2xl font-bold mb-6">Processing Results</h2>
+            <div id="resultsContent" class="space-y-4">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2024 Multi-Agent AI System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // File Upload Handling
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const contentInput = document.getElementById('contentInput');
+        const results = document.getElementById('results');
+        const resultsContent = document.getElementById('resultsContent');
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/process/file', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error processing file');
+            }
+        });
+
+        async function processContent() {
+            const content = contentInput.value.trim();
+            if (!content) {
+                alert('Please enter some content');
+                return;
+            }
+
+            try {
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content })
+                });
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error processing content');
+            }
+        }
+
+        function displayResults(data) {
+            results.classList.remove('hidden');
+            resultsContent.innerHTML = `
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Classification:</h3>
+                    <pre class="bg-white p-4 rounded">${JSON.stringify(data.classification, null, 2)}</pre>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold mb-2">Processing Result:</h3>
+                    <pre class="bg-white p-4 rounded">${JSON.stringify(data.processing_result, null, 2)}</pre>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html> 
